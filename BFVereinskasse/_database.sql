@@ -11,17 +11,24 @@ go
 use BFVereinskasse
 go
 
-Create Table Vereinsmitglied(
-	Id int Identity not null, 
-	Vorname varchar(255),
-	Nachname varchar(255),
-	IsActive bit,
-	Bild image
+Create Table Mitglied(
+	Id int Primary Key Identity not null, 
+	Vorname varchar(255) not null,
+	Nachname varchar(255) not null,
+	IsActive bit not null,
+	Bild varchar(255) null
 )
-Create Table Zahlungen(
-	Id int Identity not null, 
-	VereinsmitgliedId int not null,
+Create Table Zahlung(
+	Id int Primary Key Identity not null, 
+	MemberId int not null,
 	Betrag money not null,
 	Datum datetime not null, 
 	Beschreibung varchar(50),
+	Constraint FK_ZahlungMitglied
+		foreign key (MemberId) References Mitglied(Id)
 )
+go
+
+insert into Mitglied (Vorname, Nachname, IsActive) 
+VALUES (N'Heasd', N'Oida', 1)
+go

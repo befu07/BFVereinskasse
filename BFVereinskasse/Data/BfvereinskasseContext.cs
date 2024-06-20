@@ -15,23 +15,24 @@ public partial class BfvereinskasseContext : DbContext
     {
     }
 
-    public virtual DbSet<Vereinsmitglied> Vereinsmitglieds { get; set; }
+    public virtual DbSet<Mitglied> Mitglieds { get; set; }
 
-    public virtual DbSet<Zahlungen> Zahlungens { get; set; }
+    public virtual DbSet<Zahlung> Zahlungs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("name=AppDb");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Vereinsmitglied>(entity =>
+        modelBuilder.Entity<Mitglied>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Vereinsmitglied");
+            entity.HasKey(e => e.Id).HasName("PK__Mitglied__3214EC07587C0100");
 
-            entity.Property(e => e.Bild).HasColumnType("image");
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.ToTable("Mitglied");
+
+            entity.Property(e => e.Bild)
+                .HasMaxLength(255)
+                .IsUnicode(false);
             entity.Property(e => e.Nachname)
                 .HasMaxLength(255)
                 .IsUnicode(false);
@@ -40,18 +41,22 @@ public partial class BfvereinskasseContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Zahlungen>(entity =>
+        modelBuilder.Entity<Zahlung>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("Zahlungen");
+            entity.HasKey(e => e.Id).HasName("PK__Zahlung__3214EC07DCD53748");
+
+            entity.ToTable("Zahlung");
 
             entity.Property(e => e.Beschreibung)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Betrag).HasColumnType("money");
             entity.Property(e => e.Datum).HasColumnType("datetime");
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+            entity.HasOne(d => d.Member).WithMany(p => p.Zahlungs)
+                .HasForeignKey(d => d.MemberId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ZahlungMitglied");
         });
 
         OnModelCreatingPartial(modelBuilder);
