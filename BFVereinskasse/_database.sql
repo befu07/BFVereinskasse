@@ -23,7 +23,7 @@ Create Table Zahlung(
 	MemberId int not null,
 	Betrag money not null,
 	Datum datetime not null, 
-	Beschreibung varchar(50),
+	Beschreibung varchar(50) null,
 	Constraint FK_ZahlungMitglied
 		foreign key (MemberId) References Mitglied(Id)
 )

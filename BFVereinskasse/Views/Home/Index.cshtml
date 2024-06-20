@@ -1,8 +1,28 @@
-﻿@{
+﻿@using BFVereinskasse.Data
+@{
     ViewData["Title"] = "Home Page";
 }
+@model IndexVM
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+
+<table>
+    @foreach (var member in Model.Members)
+    {
+        <tr>
+            <td>
+                @member.Vorname
+            </td>
+            <td>
+                @member.Nachname
+            </td>
+            <td>
+                @member.IsActive
+            </td>
+        </tr>
+    }
+</table>

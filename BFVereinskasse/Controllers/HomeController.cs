@@ -11,15 +11,18 @@ namespace BFVereinskasse.Controllers
         private readonly PaymentService _paymentService;
         private readonly MemberService _memberService;
 
-        public HomeController(ILogger<HomeController> logger, PaymentService paymentService)
+        public HomeController(ILogger<HomeController> logger, PaymentService paymentService, MemberService memberService)
         {
             _logger = logger;
             _paymentService = paymentService;
+            _memberService = memberService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var vm = new IndexVM();
+            vm.Members = await _memberService.GetMembers();
+            return View(vm);
         }
 
         public IActionResult Privacy()
