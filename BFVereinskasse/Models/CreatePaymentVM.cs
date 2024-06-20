@@ -20,11 +20,12 @@ namespace BFVereinskasse.Models
         [Display(Name = "Betrag")]
         //[DataType(DataType.Currency)] // geht ned
         public decimal? Amount { get; set; }
+
         [PastDate]
         [Display(Name = "Datum")]
-        public DateTime TimeStamp { get; set; }
+        public DateTime? TimeStamp { get; set; }
         //DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss").Replace(' ', 'T');
-        public string DateTimePickerValue { get; set; } = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
+        public string DateTimePickerValue { get => TimeStamp.Value.ToString("yyyy-MM-ddTHH:mm:ss"); }
 
     }
 

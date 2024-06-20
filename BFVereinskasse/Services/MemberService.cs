@@ -15,4 +15,9 @@ public class MemberService
     {
         return await _ctx.Mitglieds.ToListAsync();
     }
+    internal async Task<bool> IsUserActiveAsync(int mitgliedId)
+    {
+        var user = await _ctx.Mitglieds.FindAsync(mitgliedId);
+        return user.IsActive;
+    }
 }

@@ -1,4 +1,5 @@
-﻿using BFVereinskasse.Models;
+﻿using BFVereinskasse.Data;
+using BFVereinskasse.Models;
 using BFVereinskasse.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,7 @@ namespace BFVereinskasse.Controllers
         {
             var vm = new CreatePaymentVM();
             vm.Members = await _memberService.GetMembers();
+            vm.TimeStamp = DateTime.Now;
             return View(vm);
         }
         [HttpPost]
@@ -26,6 +28,29 @@ namespace BFVereinskasse.Controllers
         {
             if (ModelState.IsValid)
             {
+                Zahlung payment = new()
+                {
+                    Betrag = form.Amount!.Value,
+                    Datum = form.TimeStamp!.Value,
+                    MitgliedId = form.MemberId!.Value,
+                    Beschreibung = form.Description
+                };
+
+
+                int result = -1;
+                if (await _memberService.IsUserActiveAsync(payment.MitgliedId))
+                {
+                    result = await _paymentService.CreatePayment(payment);
+                }
+                switch (result)
+                {
+                    case 1:
+                        TempData["SuccessMessage"] = "Zahlung gespeichert !"; break;
+                    case -1:
+                        TempData["ErrorMessage"] = "User Inaktiv !"; break;
+                    default:
+                        TempData["ErrorMessage"] = "Zahlung fehlgeschlagen !"; break;
+                }
                 return RedirectToAction("Index", controllerName: "Home");
             }
             else
@@ -33,7 +58,7 @@ namespace BFVereinskasse.Controllers
                 form.Members = await _memberService.GetMembers();
                 var errormessages = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage));
                 var errorstring = string.Join(", ", errormessages);
-                TempData["ErrorMessage"] = errorstring;
+                //TempData["ErrorMessage"] = errorstring; // lass ich hier weg, weil Validation über Felder direkt 
                 return View(form);
 
 

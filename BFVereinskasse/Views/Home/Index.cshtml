@@ -18,6 +18,78 @@
     <div class="col-3">
         <a href="/Payment/CreatePayment" class="btn btn-sm btn-light">Neue Zahlung</a>
     </div>
+    <div class="col-3">
+        <span class="text-success">@TempData["SuccessMessage"]</span>
+        <span class="text-danger">@TempData["ErrorMessage"]</span>
+    </div>
+</div>
+
+<div class="">
+    <form action="/Home/Index" method="post">
+        <div class="row">
+            <div class="col-1">
+                <h3>Filter</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                Mitglied:
+            </div>
+            <div class="col-2">
+                <select name="MemberId">
+                    <option value=""> ...</option>
+                    @foreach (var member in Model.Members)
+                    {
+                        if (member.Id == Model.MemberId)
+                        {
+                            <option selected value="@member.Id"> @member.Vorname @member.Nachname </option>
+                        }
+                        else
+                        {
+                            <option value="@member.Id"> @member.Vorname @member.Nachname </option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-2">
+                Ein/Aus:
+            </div>
+            <div class="col-2">
+                <select name="InOutFilterType">
+                    <option value="">alle</option>
+                    <option value="1">Eingänge</option>
+                    <option value="2">Ausgänge</option>
+                </select>
+            </div>
+
+            <div class="col-2">
+                Suchtext:
+            </div>
+            <div class="col-2">
+                <input name="Query" class="form-control" />
+            </div>
+            <div class="col-2">
+                Limit:
+            </div>
+            <div class="col-2">
+                <select name="Limit">
+                    @{
+                        int limit = Model.Limit.GetValueOrDefault();
+
+                    }
+                    <option value="">...</option>
+                    <option selected="@(limit == 15 ? "true" : "false")" value="15">15</option>
+                    <option selected="@(limit == 30 ? "true" : "false")" value="30">30</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <input type="submit" value="Filter anwenden" />
+            </div>
+        </div>
+
+    </form>
 </div>
 
 @*ZAHLUNGEN*@
@@ -32,6 +104,9 @@
     <th>
         Mitglied
     </th>
+    <th>
+        Beschreibung
+    </th>
     </thead>
     @foreach (var item in Model.Payments)
     {
@@ -45,6 +120,9 @@
             <td>
                 @item.Mitglied.Vorname
                 @item.Mitglied.Nachname
+            </td>
+            <td>
+                @item.Beschreibung
             </td>
         </tr>
     }
