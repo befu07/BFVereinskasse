@@ -7,7 +7,7 @@ public partial class Zahlung
 {
     public int Id { get; set; }
 
-    public int MemberId { get; set; }
+    public int MitgliedId { get; set; }
 
     public decimal Betrag { get; set; }
 
@@ -15,5 +15,5 @@ public partial class Zahlung
 
     public string? Beschreibung { get; set; }
 
-    public virtual Mitglied Member { get; set; } = null!;
+    public virtual Mitglied Mitglied { get; set; } = null!;
 }

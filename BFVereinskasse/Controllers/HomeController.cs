@@ -22,6 +22,7 @@ namespace BFVereinskasse.Controllers
         {
             var vm = new IndexVM();
             vm.Members = await _memberService.GetMembers();
+            vm.Payments = await _paymentService.GetZahlungen();
             return View(vm);
         }
 

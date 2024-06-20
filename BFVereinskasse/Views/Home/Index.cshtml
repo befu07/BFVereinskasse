@@ -4,13 +4,54 @@
 }
 @model IndexVM
 
-<div class="text-center">
+@* <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div> *@
+
+<div class="row">
+    <div class="col-3">
+        <h1>
+            Zahlungen
+        </h1>
+    </div>
+    <div class="col-3">
+        <a href="/Zahlung/New" class="btn btn-sm btn-light">Neue Zahlung</a>
+    </div>
 </div>
 
+@*ZAHLUNGEN*@
+<table class="table">
+    <thead>
+    <th>
+        Datum
+    </th>
+    <th>
+        Betrag
+    </th>
+    <th>
+        Mitglied
+    </th>
+    </thead>
+    @foreach (var item in Model.Payments)
+    {
+        <tr>
+            <td>
+                @item.Datum.ToString("d")
+            </td>
+            <td>
+                @item.Betrag.ToString("C")
+            </td>
+            <td>
+                @item.Mitglied.Vorname
+                @item.Mitglied.Nachname
+            </td>
+        </tr>
+    }
+</table>
 
-<table>
+@*MITGLIEDER*@
+<table class="table">
     @foreach (var member in Model.Members)
     {
         <tr>

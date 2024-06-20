@@ -26,7 +26,7 @@ public partial class BfvereinskasseContext : DbContext
     {
         modelBuilder.Entity<Mitglied>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Mitglied__3214EC07587C0100");
+            entity.HasKey(e => e.Id).HasName("PK__Mitglied__3214EC078766EB36");
 
             entity.ToTable("Mitglied");
 
@@ -43,7 +43,7 @@ public partial class BfvereinskasseContext : DbContext
 
         modelBuilder.Entity<Zahlung>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Zahlung__3214EC07DCD53748");
+            entity.HasKey(e => e.Id).HasName("PK__Zahlung__3214EC07AD17CB27");
 
             entity.ToTable("Zahlung");
 
@@ -53,8 +53,8 @@ public partial class BfvereinskasseContext : DbContext
             entity.Property(e => e.Betrag).HasColumnType("money");
             entity.Property(e => e.Datum).HasColumnType("datetime");
 
-            entity.HasOne(d => d.Member).WithMany(p => p.Zahlungs)
-                .HasForeignKey(d => d.MemberId)
+            entity.HasOne(d => d.Mitglied).WithMany(p => p.Zahlungs)
+                .HasForeignKey(d => d.MitgliedId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ZahlungMitglied");
         });

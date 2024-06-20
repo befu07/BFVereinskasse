@@ -14,7 +14,7 @@ public class PaymentService
     }
     public async Task<List<Zahlung>> GetZahlungen()
     {
-        return await _ctx.Zahlungs.ToListAsync();
+        return await _ctx.Zahlungs.Include(o=>o.Mitglied).OrderByDescending(o=>o.Datum).ToListAsync();
     }
 
 }
