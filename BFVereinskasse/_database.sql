@@ -1,10 +1,12 @@
-Create Database BFVereinskasse
+use master 
 go
 
 ALTER DATABASE BFVereinskasse SET SINGLE_USER WITH ROLLBACK IMMEDIATE 
 GO
 Drop DATABASE if exists BFVereinskasse
 GO
+Create Database BFVereinskasse
+go
 
 use BFVereinskasse
 go
