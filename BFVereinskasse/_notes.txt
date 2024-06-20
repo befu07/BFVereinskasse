@@ -1,0 +1,52 @@
+﻿********** Packages:
+
+install-package Microsoft.EntityFrameworkCore.SqlServer
+install-package Microsoft.EntityFrameworkCore.Design
+
+********** Scaffolding:
+
+dotnet ef dbcontext scaffold name="AppDb" Microsoft.EntityFrameworkCore.SqlServer -o Data -f
+
+********** Connection String:
+
+"AppDb": "Data Source=.\\sqlexpress;Initial Catalog=BFVereinskasse;Persist Security Info=True;User ID=sa;Password=Admin2019$;TrustServerCertificate=True",
+
+
+
+
+
+
+
+********** Angabe:
+Einleitung 
+Der Vereinskassier in Ihrem Hobbyverein hat sein Amt abgegeben, und Sie sollen in seine Fußstapfen 
+treten. Um die Buchführung der Bargeldkasse einfacher zu machen, wollen Sie sich ein Programm 
+schreiben, welches Ein- und Auszahlungen aufzeichnet. Zusätzlich soll es, um die Finanzen des 
+Vereins besser steuern zu können, einen Statistikabschnitt geben. 
+Detailbeschreibung 
+Das Programm soll Ein- und Auszahlungen erfassen (zusammen auch als „Zahlung“ bezeichnet). Jede 
+Zahlung speichert den ein- bzw. ausgezahlten Betrag, das Datum, eine kurze (maximal 50 Zeichen) 
+Beschreibung, sowie welches Vereinsmitglied die Zahlung getätigt hat. Zahlungen dürfen dabei nur 
+für das aktuelle oder vergangene Zeitpunkte eingetragen werden. Zahlungen sollen jederzeit 
+nachträglich bearbeitet (Betrag, Datum, Beschreibung, Vereinsmitglied) und gelöscht werden 
+können. Für ein Vereinsmitglied müssen Vor- und Nachname erhoben werden, außerdem kann 
+optional ein Bild hochgeladen werden.  Vereinsmitglieder sollen außerdem in einer einfachen Liste 
+angezeigt werden können. Außerdem sollen Vereinsmitglieder als inaktiv markiert werden können. 
+Für sie dürfen dann keine neuen Zahlungen mehr eingetragen werden. 
+Auf der Startseite sollen alle Zahlungen chronologisch absteigend angezeigt werden. Für jede Zahlung 
+sollen Betrag, Zeitpunkt, Name der Person (inklusive Bild, falls verfügbar), und Beschreibung 
+angezeigt werden. Außerdem soll es eine Such- und Filterfunktion geben, mit der die angezeigten 
+Zahlungen eingeschränkt werden können. Die Suchfunktion durchsucht Zahlungen nach ihrer 
+Beschreibung. Die Filteroptionen sollen erlauben, nur Ein- bzw. Auszahlungen (oder beide) 
+anzuzeigen, und/oder nur Zahlungen einer bestimmten Person. Außerdem soll die Anzahl der 
+angezeigten Einträge auf die letzten 15 oder 30 eingeschränkt werden können. 
+Auf einer separaten Seite sollen Statistiken zu den Zahlungen einsehbar sein. Zunächst sollen es eine 
+Übersichtsstatistik geben. Darin sollen Summe und Anzahl aller Ein- und Auszahlungen separat, sowie 
+auch für alle Ein- und Auszahlungen gemeinsam (also quasi den aktuellen Kontostand) angezeigt 
+werden. Zusätzlich sollen die fünf höchsten Ein- und Auszahlungen in einer Grafik dargestellt werden. 
+Die Ein- bzw. Auszahlungen sollen mit dem Namen der Person und der Beschreibung der Zahlung 
+beschriftet sein. 
+Zur besseren Datenanalyse soll es auf der Statistikseite die Möglichkeit geben, einen Zeitraum bzw. 
+eine Person auszuwählen. Zusätzlich zur Übersicht soll dann eine neue Statistik, die nur auf den 
+Zeitraum und/oder die Person zutrifft, angezeigt werden. Die grafische Statistik wird ersetzt, soll sich 
+dann also nur noch auf den angegebenen Zeitraum bzw. die angegebene Person beziehen. 
