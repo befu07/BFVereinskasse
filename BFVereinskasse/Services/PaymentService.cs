@@ -55,4 +55,16 @@ public class PaymentService
     private static Func<Zahlung, bool> FilterMember(int memberId) => (t) => t.MitgliedId == memberId;
     private static Func<Zahlung, bool> FilterQuery(string query) => (t) => t.Beschreibung.Contains(query);
     private static Func<Zahlung, bool> FilterHasDescription => (t) => t.Beschreibung != null;
+
+    internal async Task<int> DeletePaymentAsync(int id)
+    {
+        var payment = await _ctx.Zahlungs.FindAsync(id);
+        if (payment is null)
+        {
+            return -1;
+        }
+        _ctx.Zahlungs.Remove(payment);
+        return await _ctx.SaveChangesAsync();
+    }
+
 }

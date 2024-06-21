@@ -71,5 +71,19 @@ namespace BFVereinskasse.Controllers
                 //return RedirectToAction(nameof(CreatePayment));
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DeletePayment(int id)
+        {
+            int result = await _paymentService.DeletePaymentAsync(id);
+            switch (result)
+            {
+                case 1:
+                    TempData["SuccessMessage"] = "Zahlung gelöscht !"; break;
+                default:
+                    TempData["ErrorMessage"] = "Vorgang fehlgeschlagen !"; break;
+            }
+            return RedirectToAction("Index", controllerName: "Home");
+        }
     }
 }
