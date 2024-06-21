@@ -67,4 +67,22 @@ public class PaymentService
         return await _ctx.SaveChangesAsync();
     }
 
+    internal async Task<Zahlung> GetPaymentAsync(int id)
+    {
+        return await _ctx.Zahlungs.FindAsync(id);
+    }
+
+    internal async Task<int> UpdatePaymentAsync(Zahlung updatedPayment)
+    {
+        var payment = await _ctx.Zahlungs.FindAsync(updatedPayment.Id);
+        if (payment is null)
+        {
+            return -1;
+        }
+        payment.Datum = updatedPayment.Datum;
+        payment.Beschreibung = updatedPayment.Beschreibung;
+        payment.Betrag = updatedPayment.Betrag;
+        payment.MitgliedId = updatedPayment.MitgliedId;
+        return await _ctx.SaveChangesAsync();
+    }
 }

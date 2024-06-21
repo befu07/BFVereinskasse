@@ -152,7 +152,8 @@
             <td>
                 @item.Beschreibung
             </td>
-            <td>edit
+            <td>
+                <a href="/Payment/EditPayment/@item.Id" class="btn btn-sm btn-info">Edit</a>
             </td>
             <td>
                 <a href="/Payment/DeletePayment/@item.Id" onclick="return confirm('Zahlung löschen?')" class="btn btn-sm btn-danger">Delete</a>

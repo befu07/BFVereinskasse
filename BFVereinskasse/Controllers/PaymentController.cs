@@ -1,4 +1,5 @@
-﻿using BFVereinskasse.Data;
+﻿using Azure;
+using BFVereinskasse.Data;
 using BFVereinskasse.Models;
 using BFVereinskasse.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -60,15 +61,6 @@ namespace BFVereinskasse.Controllers
                 var errorstring = string.Join(", ", errormessages);
                 //TempData["ErrorMessage"] = errorstring; // lass ich hier weg, weil Validation über Felder direkt 
                 return View(form);
-
-
-                //var vm = new CreatePaymentVM();
-                //vm.Members = await _memberService.GetMembers();
-                //vm.DateTimePickerValue = form.TimeStamp.ToString("yyyy-MM-ddTHH:mm:ss");
-                //vm.Description = form.Description;
-                //vm.MemberId = form.MemberId;
-                //vm.Amount = form.Amount;
-                //return RedirectToAction(nameof(CreatePayment));
             }
         }
 
@@ -84,6 +76,49 @@ namespace BFVereinskasse.Controllers
                     TempData["ErrorMessage"] = "Vorgang fehlgeschlagen !"; break;
             }
             return RedirectToAction("Index", controllerName: "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditPayment(int id)
+        {
+            Zahlung payment = await _paymentService.GetPaymentAsync(id);
+            var vm = new PaymentVM(payment);
+            vm.Members = await _memberService.GetMembers();
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditPayment(PaymentVM form)
+        {
+            if (ModelState.IsValid)
+            {
+                Zahlung updatedPayment = new()
+                {
+                    Id = form.Id,
+                    MitgliedId = (int)form.MemberId,
+                    Betrag = form.Amount.Value,
+                    Datum = form.TimeStamp.Value,
+                    Beschreibung = form.Description,
+                };
+                int result = await _paymentService.UpdatePaymentAsync(updatedPayment);
+                switch (result)
+                {
+                    case 1:
+                        TempData["SuccessMessage"] = "Update erfolgreich!"; break;
+                    default:
+                        TempData["ErrorMessage"] = "Vorgang fehlgeschlagen !"; break;
+                }
+                return RedirectToAction("Index", controllerName: "Home");
+            }
+            else
+            {
+                form.Members = await _memberService.GetMembers();
+                var errormessages = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage));
+                var errorstring = string.Join(", ", errormessages);
+                //TempData["ErrorMessage"] = errorstring; // lass ich hier weg, weil Validation über Felder direkt 
+                return View(form);
+                TempData["ErrorMessage"] = "vm not valid !";
+                return RedirectToAction("Index", controllerName: "Home");
+            }
         }
     }
 }

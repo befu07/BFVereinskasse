@@ -1,0 +1,65 @@
+﻿
+@model PaymentVM
+
+<form class="form" action="/Payment/EditPayment" method="post">
+    <input hidden name="Id" value="@Model.Id" />
+    <div class="row my-3">
+        <div class="col-md-3">
+            Mitglied:
+        </div>
+        <div class="col-md-4">
+            <select class="form-control" name="MemberId">
+                <option value=""> ... </option>
+                @foreach (var item in Model.Members)
+                {
+                    if (Model.MemberId == item.Id)
+                    {
+                        <option selected value="@item.Id"> @item.Vorname @item.Nachname</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Id"> @item.Vorname @item.Nachname</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="MemberId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-md-3">
+            Datum:
+        </div>
+        <div class="col-md-4">
+            <input class="form-control" type="datetime-local" value="@Model.DateTimePickerValue" name="TimeStamp" />
+            <span asp-validation-for="TimeStamp" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-md-3">
+            Betrag in €:
+        </div>
+        <div class="col-md-4">
+            <input class="form-control" type="decimal" value="@Model.Amount" name="Amount" />
+            <span asp-validation-for="Amount" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-md-3">
+            Beschreibung:
+        </div>
+        <div class="col-md-4">
+            <input class="form-control" type="text" value="@Model.Description" name="Description" />
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-md-4">
+            <input class="btn btn-success" type="submit" />
+        </div>
+    </div>
+
+</form>
+
+
+@* <div asp-validation-summary="All" class="text-danger"></div> *@
+<span class="text-danger">@TempData["ErrorMessage"]</span>
