@@ -152,20 +152,3 @@
     }
 </table>
 
-@*MITGLIEDER*@
-<table class="table">
-    @foreach (var member in Model.Members)
-    {
-        <tr>
-            <td>
-                @member.Vorname
-            </td>
-            <td>
-                @member.Nachname
-            </td>
-            <td>
-                @member.IsActive
-            </td>
-        </tr>
-    }
-</table>

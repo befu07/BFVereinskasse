@@ -20,4 +20,11 @@ public class MemberService
         var user = await _ctx.Mitglieds.FindAsync(mitgliedId);
         return user.IsActive;
     }
+
+    internal async Task<int> UpdateUserStatusAsync(int id, bool v)
+    {
+        var user = await _ctx.Mitglieds.FindAsync(id);
+        user.IsActive = v;
+        return await _ctx.SaveChangesAsync();
+    }
 }

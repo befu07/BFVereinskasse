@@ -1,0 +1,50 @@
+﻿@model MemberIndexVM
+
+<div class="row">
+    <div class="col-3">
+        <h1>
+            MITGLIEDER
+        </h1>
+    </div>
+    <div class="col-3">
+        <span class="text-success">@TempData["SuccessMessage"]</span>
+        <span class="text-danger">@TempData["ErrorMessage"]</span>
+    </div>
+</div>
+@*MITGLIEDER*@
+<table class="table">
+    <thead>
+    <th>
+        Name
+    </th>
+    <th>
+        Status Aktiv
+    </th>
+    </thead>
+
+    @foreach (var member in Model.Members)
+    {
+        <form action="/Home/MemberUpdate" method="post">
+            <input hidden name="Id" value="@member.Id" />
+        <tr>
+            <td>
+                    @member.Vorname
+
+                    @member.Nachname
+            </td>
+            <td>
+                    @if (member.IsActive)
+                    {
+
+                    <input checked type="checkbox" name="IsActiveString" onchange="this.form.submit()" />
+                    }
+                    else
+                    {
+                    <input type="checkbox" name="IsActiveString" onchange="this.form.submit()" />
+
+                    }
+            </td>
+        </tr>
+        </form>
+    }
+</table>

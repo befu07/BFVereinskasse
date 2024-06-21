@@ -27,6 +27,40 @@ namespace BFVereinskasse.Controllers
             return View(vm);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> MemberAsync()
+        {
+            var vm = new MemberIndexVM();
+            vm.Members = await _memberService.GetMembers();
+            return View(vm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> MemberUpdateAsync([Bind("Id,IsActiveString")] MemberVM member)
+        {
+            if (ModelState.IsValid)
+            {
+                var newStatus = member.GetStatus();
+                int result = await _memberService.UpdateUserStatusAsync(member.Id, member.GetStatus());
+                if (result == 1)
+                {
+                    switch (result)
+                    {
+                        case 1:
+                            TempData["SuccessMessage"] = "User upgedated !"; break;
+                        default:
+                            TempData["ErrorMessage"] = "Update fehlgeschlagen !"; break;
+                    }
+                }
+            }
+            else
+            {
+
+            }
+            var vm = new MemberIndexVM();
+            vm.Members = await _memberService.GetMembers();
+            return RedirectToAction("Member");
+        }
+
         [HttpPost]
         public async Task<IActionResult> IndexAsync(IndexVM form)
         {
