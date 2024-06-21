@@ -15,7 +15,7 @@ public class PaymentService
     }
     public async Task<List<Zahlung>> GetZahlungen()
     {
-        return await _ctx.Zahlungs.Include(o=>o.Mitglied).OrderByDescending(o=>o.Datum).ToListAsync();
+        return await _ctx.Zahlungs.Include(o => o.Mitglied).OrderByDescending(o => o.Datum).ToListAsync();
     }
 
     internal async Task<int> CreatePayment(Zahlung payment)
@@ -32,12 +32,12 @@ public class PaymentService
             //payments = payments.Where(payments, form.MemberId)
             payments = payments.Where(FilterMember(form.MemberId.Value)).ToList();
         }
-        if (form.InOutFilterType.HasValue)
+        if (form.InOutFilter.HasValue)
         {
-            if(form.InOutFilterType.Value == 1)
-            payments = payments.Where(FilterPositive).ToList();
-            if(form.InOutFilterType.Value == 2)
-            payments = payments.Where(FilterNegative).ToList();
+            if (form.InOutFilter.Value == IndexVM.InOutFilterType.Eingänge)
+                payments = payments.Where(FilterPositive).ToList();
+            if (form.InOutFilter.Value == IndexVM.InOutFilterType.Ausgänge)
+                payments = payments.Where(FilterNegative).ToList();
         }
         if (!String.IsNullOrEmpty(form.Query))
         {

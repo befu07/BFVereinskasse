@@ -55,10 +55,22 @@
                 Ein/Aus:
             </div>
             <div class="col-2">
-                <select name="InOutFilterType">
-                    <option value="">alle</option>
-                    <option value="1">Eingänge</option>
-                    <option value="2">Ausgänge</option>
+                <select name="InOutFilter">
+                    <option value="">...</option>
+                    @{
+                        var inoutfilters = Enum.GetValues(typeof(IndexVM.InOutFilterType));
+                    }
+                    @foreach (IndexVM.InOutFilterType val in inoutfilters)
+                    {
+                        if (val == Model.InOutFilter.GetValueOrDefault())
+                        {
+                            <option selected value="@val">@val.ToString()</option>
+                        }
+                        else
+                        {
+                            <option value="@val">@val.ToString()</option>
+                        }
+                    }
                 </select>
             </div>
 
@@ -73,13 +85,18 @@
             </div>
             <div class="col-2">
                 <select name="Limit">
-                    @{
-                        int limit = Model.Limit.GetValueOrDefault();
-
-                    }
                     <option value="">...</option>
-                    <option selected="@(limit == 15 ? "true" : "false")" value="15">15</option>
-                    <option selected="@(limit == 30 ? "true" : "false")" value="30">30</option>
+                    @foreach (var val in Model.LimitFilters)
+                    {
+                        if (val == Model.Limit.GetValueOrDefault())
+                        {
+                            <option selected value="@val">@val</option>
+                        }
+                        else
+                        {
+                            <option value="@val">@val</option>
+                        }
+                    }
                 </select>
             </div>
         </div>
@@ -96,6 +113,9 @@
 <table class="table">
     <thead>
     <th>
+        #
+    </th>
+    <th>
         Datum
     </th>
     <th>
@@ -108,14 +128,18 @@
         Beschreibung
     </th>
     </thead>
+    @{int i = 1;}
     @foreach (var item in Model.Payments)
     {
         <tr>
             <td>
+                @(i++)
+            </td>
+            <td>
                 @item.Datum.ToString("d")
             </td>
             <td>
-                @item.Betrag.ToString("C")
+                @item.Betrag.ToString("c")
             </td>
             <td>
                 @item.Mitglied.Vorname
