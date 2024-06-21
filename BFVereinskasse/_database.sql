@@ -30,18 +30,18 @@ Create Table Zahlung(
 go
 
 
-INSERT INTO Mitglied (Vorname, Nachname, IsActive) 
+INSERT INTO Mitglied (Bild,Vorname, Nachname, IsActive) 
 VALUES
-('John', 'Doe', 1),
-('Jane', 'Smith', 1),
-('Michael', 'Johnson', 1),
-('Emily', 'Jones', 1),
-('David', 'Brown', 1),
-('Emma', 'Davis', 1),
-('Daniel', 'Wilson', 1),
-('Olivia', 'Moore', 1),
-('Matthew', 'Taylor', 1),
-('Sophia', 'Anderson', 1);
+('placeholderm.png','John', 'Doe', 1),
+('placeholderf.png','Jane', 'Smith', 1),
+('placeholderm.png','Michael', 'Johnson', 1),
+('placeholderf.png','Emily', 'Jones', 1),
+('placeholderm.png','David', 'Brown', 1),
+('placeholderf.png','Emma', 'Davis', 1),
+('placeholderm.png','Daniel', 'Wilson', 1),
+('placeholderf.png','Olivia', 'Moore', 1),
+('placeholderm.png','Matthew', 'Taylor', 1),
+('placeholderf.png','Sophia', 'Anderson', 1);
 
 go
 INSERT INTO Zahlung (Betrag, Datum, Beschreibung, MitgliedId) VALUES
@@ -143,3 +143,5 @@ INSERT INTO Zahlung (Betrag, Datum, Beschreibung, MitgliedId) VALUES
 (220.00, '2023-12-31', 'Event ticket', 8);
 
 update Zahlung set Datum = DATEADD(year,-1,Datum) where Datum > GETDATE();
+
+update Mitglied set IsActive = 0 where Id % 5 = 0;

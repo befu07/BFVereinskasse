@@ -15,6 +15,9 @@
 <table class="table">
     <thead>
     <th>
+        
+    </th>
+    <th>
         Name
     </th>
     <th>
@@ -27,6 +30,9 @@
         <form action="/Home/MemberUpdate" method="post">
             <input hidden name="Id" value="@member.Id" />
         <tr>
+            <td>
+                <img src="/img/@member.Bild" style="max-height:50px" />
+            </td>
             <td>
                     @member.Vorname
 
