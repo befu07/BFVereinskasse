@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\img\playerholderf.png" />
+    <Content Remove="wwwroot\img\placeholderf.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="wwwroot\img\playerholderf.png" />
+    <Resource Include="wwwroot\img\placeholderf.png" />
   </ItemGroup>
 
 </Project>

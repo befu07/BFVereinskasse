@@ -32,16 +32,16 @@ go
 
 INSERT INTO Mitglied (Bild,Vorname, Nachname, IsActive) 
 VALUES
-('playerholderm.png','John', 'Doe', 1),
-('playerholderf.png','Jane', 'Smith', 1),
-('playerholderm.png','Michael', 'Johnson', 1),
-('playerholderf.png','Emily', 'Jones', 1),
-('playerholderm.png','David', 'Brown', 1),
-('playerholderf.png','Emma', 'Davis', 1),
-('playerholderm.png','Daniel', 'Wilson', 1),
-('playerholderf.png','Olivia', 'Moore', 1),
-('playerholderm.png','Matthew', 'Taylor', 1),
-('playerholderf.png','Sophia', 'Anderson', 1);
+('placeholderm.png','John', 'Doe', 1),
+('placeholderf.png','Jane', 'Smith', 1),
+('placeholderm.png','Michael', 'Johnson', 1),
+('placeholderf.png','Emily', 'Jones', 1),
+('placeholderm.png','David', 'Brown', 1),
+('placeholderf.png','Emma', 'Davis', 1),
+('placeholderm.png','Daniel', 'Wilson', 1),
+('placeholderf.png','Olivia', 'Moore', 1),
+('placeholderm.png','Matthew', 'Taylor', 1),
+('placeholderf.png','Sophia', 'Anderson', 1);
 
 go
 INSERT INTO Zahlung (Betrag, Datum, Beschreibung, MitgliedId) VALUES
