@@ -1,5 +1,6 @@
 using BFVereinskasse.Data;
 using BFVereinskasse.Services;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,11 @@ builder.Services.AddTransient<PaymentService>();
 builder.Services.AddTransient<MemberService>();
 
 var app = builder.Build();
+
+var cultureInfo = new CultureInfo("de-DE");
+cultureInfo.NumberFormat.CurrencySymbol = "Heislbesn";
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

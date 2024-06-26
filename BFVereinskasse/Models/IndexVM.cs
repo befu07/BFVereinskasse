@@ -14,8 +14,8 @@ public class IndexVM
     public InOutFilterType? InOutFilter { get; set; }
     public enum InOutFilterType
     {
-        Eingänge, 
-        Ausgänge
+        Eingänge = 1, 
+        Ausgänge = 2
     }
     public int[] LimitFilters = { 15, 30 };
 
