@@ -1,22 +1,44 @@
 ﻿@model StatsIndexVM
 
-@* @{
-    var myChart = new Chart(width: 600, height: 400)
-           .AddTitle("Zahlungen")
-           .AddSeries(chartType: "column",
-      xValue: Model.Payments.Select(o => o.Mitglied.Nachname).ToArray(),
-      yValues: Model.Payments.Select(o => o.Betrag).ToArray())
-           .Write();
-} 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
 
-@{
-    var myChart = new Chart(width: 600, height: 400)
-        .AddTitle("Chart Title")
-        .AddSeries(
-            name: "Employee",
-            xValue: new[] { "Peter", "Andrew", "Julie", "Mary", "Dave" },
-            yValues: new[] { "2", "6", "4", "5", "3" })
-        .Write();
-}
-<canvas 
-*@
+<canvas id="myChart" style="width:100%;max-width:1200px"></canvas>
+
+
+@* <script>
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+        type: 'bar',
+        data: @Html.Raw(Model.PaymentsJson),
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script> *@
+
+<script>
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(Model.Names),
+            datasets: [{
+                label: 'Zahlungen',
+                data: @Html.Raw(Model.Amounts),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>

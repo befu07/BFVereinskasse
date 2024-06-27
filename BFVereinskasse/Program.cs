@@ -14,7 +14,7 @@ builder.Services.AddTransient<MemberService>();
 var app = builder.Build();
 
 var cultureInfo = new CultureInfo("de-DE");
-cultureInfo.NumberFormat.CurrencySymbol = "Heislbesn";
+cultureInfo.NumberFormat.CurrencySymbol = "€";
 CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 

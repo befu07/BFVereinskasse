@@ -15,6 +15,21 @@ public class MemberService
     {
         return await _ctx.Mitglieds.ToListAsync();
     }
+
+    internal async Task<int> CreateMember(Mitglied mitglied)
+    {
+        if (_ctx.Mitglieds.Any(o => o.Nachname == mitglied.Nachname & o.Vorname == mitglied.Vorname))
+            return -1;
+        _ctx.Mitglieds.Add(mitglied);
+        return await _ctx.SaveChangesAsync();
+    }
+
+    internal async Task<Mitglied> GetMember(int mitgliedId)
+    {
+        var user = await _ctx.Mitglieds.FindAsync(mitgliedId);
+        return user;
+    }
+
     internal async Task<bool> IsUserActiveAsync(int mitgliedId)
     {
         var user = await _ctx.Mitglieds.FindAsync(mitgliedId);

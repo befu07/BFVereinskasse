@@ -1,12 +1,16 @@
 ﻿@model MemberIndexVM
 
+
 <div class="row">
-    <div class="col-3">
+    <div class="col-3 align-self-center">
         <h1>
             MITGLIEDER
         </h1>
     </div>
-    <div class="col-3">
+    <div class="col-3 align-self-center">
+        <a href="/Home/CreateMember" class="btn btn-sm btn-outline-success ">+ Neues Mitglied</a>
+    </div>
+    <div class="col-3 align-self-center">
         <span class="text-success">@TempData["SuccessMessage"]</span>
         <span class="text-danger">@TempData["ErrorMessage"]</span>
     </div>
@@ -22,6 +26,9 @@
     </th>
     <th>
         Status Aktiv
+    </th>
+    <th>
+        BildUpload
     </th>
     </thead>
 
@@ -49,6 +56,9 @@
                     <input type="checkbox" name="IsActiveString" onchange="this.form.submit()" />
 
                     }
+            </td>
+            <td>
+                <a class="btn btn-sm btn-outline-info" href="/Home/UploadImage/@member.Id">Bild hochladen</a>
             </td>
         </tr>
         </form>

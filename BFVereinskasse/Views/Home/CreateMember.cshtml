@@ -1,0 +1,30 @@
+﻿@model CreateMemberVM
+
+<form class="form" action="/Home/CreateMember" method="post">
+    <div class="row my-3">
+        <div class="col-md-3">
+            Vorname:
+        </div>
+        <div class="col-md-4">
+            <input class="form-control" type="text" name="FirstName" />
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-md-3">
+            LastName:
+        </div>
+        <div class="col-md-4">
+            <input class="form-control" type="text" name="LastName" />
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-md-4">
+            <input class="btn btn-success" type="submit" />
+        </div>
+    </div>
+
+</form>
+
+
+@* <div asp-validation-summary="All" class="text-danger"></div> *@
+<span class="text-danger">@TempData["ErrorMessage"]</span>
