@@ -86,17 +86,13 @@
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: simpleData[0].namesHigh,
+                labels: simpleData[0].objekte.map(foo=>foo.name),
                 datasets:
                     [{
-                        label: 'Ein',
-                        data: simpleData[0].amountsHigh,
+                        label: 'Zahlungen',
+                        data: simpleData[0].objekte.map(foo => foo.amount),
                         borderWidth: 1,
-                        backgroundColor: '#9BD0F5',
-                    }, {
-                        label: 'Aus',
-                        data: simpleData[0].amountsLow,
-                        borderWidth: 1
+                        backgroundColor: simpleData[0].objekte.map(foo => foo.color),
                     }]
             },
             options: {
