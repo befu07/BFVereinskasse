@@ -121,8 +121,14 @@ namespace BFVereinskasse.Controllers
         {
             if (!String.IsNullOrEmpty(userImage?.FileName))
             {
-
-                string relativeImagePath = $"\\images\\{userImage.FileName}";
+                string userimagefilename = "userImage" + memberId;
+                if(userImage.ContentType != "image/png")
+                {
+                    TempData["ErrorMessage"] = "Nur PNG erlaubt  !";
+                    return RedirectToAction("Member");
+                }
+                var result = await _memberService.SetImagePath(memberId);
+                string relativeImagePath = $"\\img\\{userimagefilename}.png";
                 string finalPath = $"{_env.ContentRootPath}\\wwwroot{relativeImagePath}";
 
                 using (var stream = System.IO.File.Create(finalPath))

@@ -36,6 +36,13 @@ public class MemberService
         return user.IsActive;
     }
 
+    internal async Task<int> SetImagePath(int memberId)
+    {
+        var user = await _ctx.Mitglieds.FindAsync(memberId);
+        user.Bild = "userImage" + memberId +".png";
+        return await _ctx.SaveChangesAsync();
+    }
+
     internal async Task<int> UpdateUserStatusAsync(int id, bool v)
     {
         var user = await _ctx.Mitglieds.FindAsync(id);
