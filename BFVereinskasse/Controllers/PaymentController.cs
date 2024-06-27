@@ -20,7 +20,7 @@ namespace BFVereinskasse.Controllers
         public async Task<IActionResult> CreatePayment()
         {
             var vm = new CreatePaymentVM();
-            vm.Members = await _memberService.GetMembers();
+            vm.Members = await _memberService.GetActiveMembers();
             vm.TimeStamp = DateTime.Now;
             return View(vm);
         }
@@ -56,7 +56,7 @@ namespace BFVereinskasse.Controllers
             }
             else
             {
-                form.Members = await _memberService.GetMembers();
+                form.Members = await _memberService.GetActiveMembers();
                 var errormessages = ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage));
                 var errorstring = string.Join(", ", errormessages);
                 //TempData["ErrorMessage"] = errorstring; // lass ich hier weg, weil Validation über Felder direkt 
@@ -104,6 +104,8 @@ namespace BFVereinskasse.Controllers
                 {
                     case 1:
                         TempData["SuccessMessage"] = "Update erfolgreich!"; break;
+                    case 0:
+                        TempData["ErrorMessage"] = "Keine Änderungen !"; break;
                     default:
                         TempData["ErrorMessage"] = "Vorgang fehlgeschlagen !"; break;
                 }
@@ -116,8 +118,6 @@ namespace BFVereinskasse.Controllers
                 var errorstring = string.Join(", ", errormessages);
                 //TempData["ErrorMessage"] = errorstring; // lass ich hier weg, weil Validation über Felder direkt 
                 return View(form);
-                TempData["ErrorMessage"] = "vm not valid !";
-                return RedirectToAction("Index", controllerName: "Home");
             }
         }
     }

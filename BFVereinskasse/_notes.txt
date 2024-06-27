@@ -40,10 +40,12 @@ Zahlungen eingeschränkt werden können. Die Suchfunktion durchsucht Zahlungen n
 Beschreibung. Die Filteroptionen sollen erlauben, nur Ein- bzw. Auszahlungen (oder beide) 
 anzuzeigen, und/oder nur Zahlungen einer bestimmten Person. Außerdem soll die Anzahl der 
 angezeigten Einträge auf die letzten 15 oder 30 eingeschränkt werden können. 
+
 Auf einer separaten Seite sollen Statistiken zu den Zahlungen einsehbar sein. Zunächst sollen es eine 
 Übersichtsstatistik geben. Darin sollen Summe und Anzahl aller Ein- und Auszahlungen separat, sowie 
 auch für alle Ein- und Auszahlungen gemeinsam (also quasi den aktuellen Kontostand) angezeigt 
-werden. Zusätzlich sollen die fünf höchsten Ein- und Auszahlungen in einer Grafik dargestellt werden. 
+werden. 
+Zusätzlich sollen die fünf höchsten Ein- und Auszahlungen in einer Grafik dargestellt werden. 
 Die Ein- bzw. Auszahlungen sollen mit dem Namen der Person und der Beschreibung der Zahlung 
 beschriftet sein. 
 Zur besseren Datenanalyse soll es auf der Statistikseite die Möglichkeit geben, einen Zeitraum bzw. 

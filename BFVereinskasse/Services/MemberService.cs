@@ -24,6 +24,11 @@ public class MemberService
         return await _ctx.SaveChangesAsync();
     }
 
+    internal async Task<List<Mitglied>?> GetActiveMembers()
+    {
+        return await _ctx.Mitglieds.Where(o=>o.IsActive).ToListAsync();
+    }
+
     internal async Task<Mitglied> GetMember(int mitgliedId)
     {
         var user = await _ctx.Mitglieds.FindAsync(mitgliedId);
