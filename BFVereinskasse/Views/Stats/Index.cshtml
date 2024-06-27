@@ -1,9 +1,118 @@
 ﻿@model StatsIndexVM
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
-</script>
 
-<canvas id="myChart" style="width:100%;max-width:1200px"></canvas>
+<div class="row">
+    <div class="col-3 align-self-center">
+        <h1>
+            Statistiken
+        </h1>
+    </div>
+    @*     <div class="col-3 align-self-center">
+    <a href="/Payment/CreatePayment" class="btn btn-sm btn-outline-success ">+ Neue Zahlung</a>
+    </div> *@
+    <div class="col-3 align-self-center">
+        <span class="text-success">@TempData["SuccessMessage"]</span>
+        <span class="text-danger">@TempData["ErrorMessage"]</span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-3 align-self-center">
+        <h2>
+            Übersicht
+        </h2>
+    </div>
+</div>
+<table class="table">
+    <thead>
+    <th>
+        Summe Ein
+    </th>
+    <th>
+        Summe Aus
+    </th>
+    <th>
+        Kontostand
+    </th>
+    </thead>
+    <tr>
+        <td>
+            @Model.SumIn
+        </td>
+        <td>
+            @Model.SumOut
+        </td>
+        <td>
+            @Model.SumTotal
+        </td>
+    </tr>
+</table>
+
+
+
+<div class="row">
+    <div class="col-3 align-self-center">
+        <h2>
+            Höchsten Zahlungen
+        </h2>
+    </div>
+</div>
+
+<canvas id="Highest5" style="width:100%;max-width:700px"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+@section Scripts {
+    <script>
+        function GetJSON_Simple() {
+            var resp = [];
+            $.ajax({
+                type: "GET",
+                url: '/Stats/Highest',
+                async: false,
+                contentType: "application/json",
+                success: function (data) {
+                    resp.push(data);
+                },
+                error: function (req, status, error) {
+                    // do something with error
+                    alert("error");
+                }
+            });
+            return resp;
+        }
+        var simpleData = GetJSON_Simple();
+        const ctx = document.getElementById('Highest5');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: simpleData[0].namesHigh,
+                datasets:
+                    [{
+                        label: 'Ein',
+                        data: simpleData[0].amountsHigh,
+                        borderWidth: 1,
+                        backgroundColor: '#9BD0F5',
+                    }, {
+                        label: 'Aus',
+                        data: simpleData[0].amountsLow,
+                        borderWidth: 1
+                    }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+
+}
+<canvas id="myChart" style="width:100%;max-width:700px"></canvas>
 
 
 @* <script>
@@ -20,7 +129,15 @@
         }
     });
 </script> *@
+@*
 
+                // var Names = [];
+                // var Amounts = [];
+                // @foreach (var item in Model.HighestPayments)
+            // {
+            //     @:Names.push(@item.Mitglied.Nachname);
+            //     @:Amounts.push(@item.Betrag);
+            // }
 <script>
     const ctx = document.getElementById('myChart');
     new Chart(ctx, {
@@ -41,4 +158,4 @@
             }
         }
     });
-</script>
+</script> *@

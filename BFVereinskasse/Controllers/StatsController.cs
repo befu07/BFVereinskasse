@@ -1,6 +1,7 @@
 ﻿using BFVereinskasse.Models;
 using BFVereinskasse.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BFVereinskasse.Controllers
 {
@@ -39,6 +40,18 @@ namespace BFVereinskasse.Controllers
 
 
             return View(vm);
+        }
+        // GET: Jobs
+        public async Task<ActionResult> Highest()
+        {
+            var payments = await _paymentService.GetZahlungen();
+            payments = payments.OrderByDescending(o => o.Betrag).ToList();
+            var names1 = payments.Take(5).Select(o=>o.Mitglied.Nachname).ToArray();
+            var amounts1 = payments.Take(5).Select(o=>o.Betrag).ToArray();
+            var names2 = payments.TakeLast(5).Select(o=>o.Mitglied.Nachname).ToArray();
+            var amounts2 = payments.TakeLast(5).Select(o=>o.Betrag).ToArray();
+
+            return new JsonResult(new { namesHigh = names1, amountsHigh = amounts1, namesLow = names2, amountsLow = amounts2 });
         }
     }
 }
