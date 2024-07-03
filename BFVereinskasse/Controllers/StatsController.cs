@@ -3,6 +3,7 @@ using BFVereinskasse.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BFVereinskasse.Controllers
 {
@@ -59,6 +60,8 @@ namespace BFVereinskasse.Controllers
                 name = o.Mitglied.Nachname,
                 amount = o.Betrag,
                 color = o.Betrag < 0 ? "pink" : "lightblue",
+                description = o.Beschreibung,
+                date = o.Datum.ToShortDateString(),
 
             }).ToArray();
 

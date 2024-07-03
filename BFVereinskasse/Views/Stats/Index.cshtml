@@ -58,12 +58,115 @@
     </div>
 </div>
 
+<canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
 <canvas id="Highest5" style="width:100%;max-width:700px"></canvas>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+@* <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.3/Chart.js"></script> *@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 @section Scripts {
     <script>
+        console.log('Chart.js version:', Chart.version);
+
+        // Function to fetch JSON data from the specified URL
+        async function fetchHighestStats() {
+            try {
+                const url = "/Stats/Highest";
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                const data = await response.json();
+                console.log("");
+                return data;
+            } catch (error) {
+                console.error('There has been a problem with your fetch operation:', error);
+            }
+        }
+
+        //Todo getleements
+        let memberId = 2;
+        let startdate = 2024-01-01;
+        let enddate = 2025-01-01;
+
+        function fetchApi(memberId, startdate, enddate) {
+            console.log(memberId);
+            console.log(startdate);
+            console.log(enddate);
+
+            // Call the function to fetch the data
+            fetchHighestStats().then(data => {
+                if (window.myBar !== undefined)
+                    window.myBar.destroy();
+                console.log(data); // Use the fetched data here
+                const ctx = document.getElementById('myChart');
+                window.myBar = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.objekte.map(foo => foo.name),
+                        datasets:
+                            [{
+                                label: 'Zahlung', // wird über callback
+                                data: data.objekte.map(foo => foo.amount),
+                                borderWidth: 1,
+                                backgroundColor: data.objekte.map(foo => foo.color),
+                            }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        const index = context.dataIndex;
+                                        const zahlung = data.objekte[index];
+                                        let tooltiptext = [zahlung.amount.toLocaleString('de-DE', {
+                                            style: 'currency',
+                                            currency: 'EUR',
+                                            minimumFractionDigits: 2
+                                        }), zahlung.date, zahlung.description];
+
+                                        return tooltiptext;
+                                        // return data.objekte[index].description;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }).catch(error => {
+                console.error('Error fetching data:', error);
+            });
+        }
+
+        fetchApi(null, null, null);
+
+    </script>
+}
+
+@*
+        async function getData() {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                const json = await response.json();
+                console.log(json);
+            } catch (error) {
+                console.error(error.message);
+            }
+        }
+
         function GetJSON_Simple() {
             var resp = [];
             $.ajax({
@@ -82,34 +185,41 @@
             return resp;
         }
         var simpleData = GetJSON_Simple();
+        // Define the URL to fetch data from
+        const url = '/Stats/Highest';
+
+
         const ctx = document.getElementById('Highest5');
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: simpleData[0].objekte.map(foo=>foo.name),
+                labels: simpleData[0].objekte.map(foo => foo.name),
                 datasets:
                     [{
-                        label: 'Zahlungen',
+                        label: 'Zahlung',
                         data: simpleData[0].objekte.map(foo => foo.amount),
                         borderWidth: 1,
                         backgroundColor: simpleData[0].objekte.map(foo => foo.color),
                     }]
             },
             options: {
+                // scales: {
+                //     yAxes: [{
+                //         ticks: {
+                //             beginAtZero: true
+                //         }
+                //     }]
+                // },
                 scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                legend: {
+                    display: false
                 }
             }
-        });
-    </script>
-
-}
-<canvas id="myChart" style="width:100%;max-width:700px"></canvas>
-
+        });*@
 
 @* <script>
     const ctx = document.getElementById('myChart');
