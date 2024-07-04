@@ -135,7 +135,6 @@
         // Function to fetch JSON data from the specified URL
         async function fetchHighestStats(url) {
             try {
-                // const url = "/Stats/Highest";
                 const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error('Network response was not ok ' + response.statusText);
@@ -147,11 +146,6 @@
                 console.error('There has been a problem with your fetch operation:', error);
             }
         }
-
-        //Todo getleements
-        // let memberId = 2;
-        // let startdate = 2024-01-01;
-        // let enddate = 2025-01-01;
 
         function fetchApi() {
             let memberIdValue = document.getElementById('memberId').value;
