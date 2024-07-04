@@ -20,42 +20,19 @@ namespace BFVereinskasse.Controllers
         public async Task<IActionResult> IndexAsync()
         {
             var payments = await _paymentService.GetZahlungen();
-            //var myChart = new Chart(width: 600, height: 400)
-            //   .AddTitle("Zahlungen")
-            //   .AddSeries(chartType: "column",
-            //      xValue: payments.Select(o=>o.Mitglied.Nachname).ToArray(),
-            //      yValues: payments.Select(o => o.Betrag).ToArray())
-            //   .Write();
             var vm = new StatsIndexVM
             {
                 Payments = payments,
-                //Chart = myChart
+                Members = await _memberService.GetActiveMembers(),
             };
-
-
-
-
-
-
-
-
-
-
             return View(vm);
         }
-        // GET: Jobs
-        public async Task<ActionResult> Highest()
+        // GET: fetchAPI Endpoint
+        public async Task<ActionResult> Highest(int memberId, DateOnly startDate, DateOnly endDate)
         {
             var payments = await _paymentService.GetZahlungen();
-            payments = payments.OrderByDescending(o => o.Betrag).ToList();
-            var names1 = payments.Take(5).Select(o => o.Mitglied.Nachname).ToArray();
-            var amounts1 = payments.Take(5).Select(o => o.Betrag).ToArray();
-            var names2 = payments.TakeLast(5).Select(o => o.Mitglied.Nachname).ToArray();
-            var amounts2 = payments.TakeLast(5).Select(o => o.Betrag).ToArray();
-
-            var names = names1.Concat(names2).ToArray();
-            var amounts = amounts1.Concat(amounts2).ToArray();
-            var objekte = payments.Take(5).Concat(payments.TakeLast(5)).Select(o => new
+            var filteredpayments = await _paymentService.GetFilteredZahlungenAsync(memberId, startDate, endDate);
+            var objekte = filteredpayments.Where(o => o.Betrag > 0).Take(5).Concat(filteredpayments.Where(o => o.Betrag < 0).TakeLast(5)).Select(o => new
             {
                 name = o.Mitglied.Nachname,
                 amount = o.Betrag,
@@ -63,9 +40,18 @@ namespace BFVereinskasse.Controllers
                 description = o.Beschreibung,
                 date = o.Datum.ToShortDateString(),
 
-            }).ToArray();
+            }).ToHashSet();
+            var balance = filteredpayments.Sum(o => o.Betrag);
+            var sumWithdrawals = filteredpayments.Where(o => o.Betrag < 0).Sum(o => o.Betrag);
+            var sumDeposits = filteredpayments.Where(o => o.Betrag > 0).Sum(o => o.Betrag);
 
-            return new JsonResult(new { objekte = objekte, names = names, amounts = amounts, namesHigh = names1, amountsHigh = amounts1, namesLow = names2, amountsLow = amounts2 });
+            return new JsonResult(new
+            {
+                objekte = objekte,
+                sumDeposits = sumDeposits,
+                sumWithdrawals = sumWithdrawals,
+                balance = balance
+            });
         }
     }
 }

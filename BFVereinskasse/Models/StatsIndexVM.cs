@@ -6,6 +6,8 @@ namespace BFVereinskasse.Models
 {
     public class StatsIndexVM
     {
+        public int MemberId { get; set; }
+        public List<Mitglied> Members { get; set; }
         public IEnumerable<Zahlung> Payments { get; set; }
         public IEnumerable<Zahlung> HighestPayments => Payments.OrderByDescending(o => o.Betrag).Take(5).ToList();
         public IEnumerable<Zahlung> HighestNegativePayments => Payments.OrderBy(o => o.Betrag).Take(5).ToList();

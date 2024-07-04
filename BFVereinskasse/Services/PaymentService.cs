@@ -85,4 +85,25 @@ public class PaymentService
         payment.MitgliedId = updatedPayment.MitgliedId;
         return await _ctx.SaveChangesAsync();
     }
+
+    internal async Task<List<Zahlung>> GetFilteredZahlungenAsync(int memberId, DateOnly startDate, DateOnly endDate)
+    {
+        var payments = _ctx.Zahlungs.AsQueryable();
+        if (memberId != default(int))
+        {
+            payments = payments.Where(o => o.MitgliedId == memberId);
+        }
+        if (startDate != default(DateOnly))
+        {
+            var startDateDT = startDate.ToDateTime(new TimeOnly());
+            payments = payments.Where(o => o.Datum >= startDateDT);
+        }
+        if (endDate != default(DateOnly))
+        {
+            var endDateDT = endDate.ToDateTime(new TimeOnly());
+            payments = payments.Where(o => o.Datum <= endDateDT);
+        }
+        payments = payments.OrderByDescending(o => o.Betrag);
+        return await payments.ToListAsync();
+    }
 }

@@ -53,12 +53,75 @@
 <div class="row">
     <div class="col-3 align-self-center">
         <h2>
-            Höchsten Zahlungen
+            Gefiltert
         </h2>
     </div>
 </div>
 
-<canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+<table class="table">
+    <thead>
+    <th>
+        Summe Ein
+    </th>
+    <th>
+        Summe Aus
+    </th>
+    <th>
+        Kontostand
+    </th>
+    </thead>
+    <tr>
+        <td id="filteredSumDeposits"></td>
+        <td id="filteredSumWithdrawals"></td>
+        <td id="filteredBalance"></td>
+    </tr>
+</table>
+
+
+<div class="">
+    <div class="row">
+        <div class="col-1">
+            Mitglied:
+        </div>
+        <div class="col-3">
+            <select id="memberId" name="MemberId">
+                <option value=""> ...</option>
+                @foreach (var member in Model.Members)
+                {
+                    if (member.Id == Model.MemberId)
+                    {
+                        <option selected value="@member.Id"> @member.Vorname @member.Nachname </option>
+                    }
+                    else
+                    {
+                        <option value="@member.Id"> @member.Vorname @member.Nachname </option>
+                    }
+                }
+            </select>
+        </div>
+@*         <div class="col-2">
+            ZeitRaum
+        </div> *@
+        <div class="col-1">
+            Von:
+            <br />
+            Bis:
+        </div>
+        <div class="col-2">
+            <input type="date" id="startDate" name="StartDate" />
+            <br />
+            <input type="date" id="endDate" name="EndDate" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <input type="submit" value="Filter anwenden" onclick="fetchApi(memberId, startDate.value, endDate)" />
+        </div>
+    </div>
+</div>
+
+
+<canvas id="myChart" style="width:100%;max-width:700px;max-height:300px;"></canvas>
 
 <canvas id="Highest5" style="width:100%;max-width:700px"></canvas>
 
@@ -70,9 +133,9 @@
         console.log('Chart.js version:', Chart.version);
 
         // Function to fetch JSON data from the specified URL
-        async function fetchHighestStats() {
+        async function fetchHighestStats(url) {
             try {
-                const url = "/Stats/Highest";
+                // const url = "/Stats/Highest";
                 const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error('Network response was not ok ' + response.statusText);
@@ -86,17 +149,30 @@
         }
 
         //Todo getleements
-        let memberId = 2;
-        let startdate = 2024-01-01;
-        let enddate = 2025-01-01;
+        // let memberId = 2;
+        // let startdate = 2024-01-01;
+        // let enddate = 2025-01-01;
 
-        function fetchApi(memberId, startdate, enddate) {
-            console.log(memberId);
-            console.log(startdate);
-            console.log(enddate);
+        function fetchApi() {
+            let memberIdValue = document.getElementById('memberId').value;
+            let startdateValue = document.getElementById('startDate').value;
+            let enddateValue = document.getElementById('endDate').value;
+
+            const basePath = '/Stats/Highest';
+            const params = new URLSearchParams({
+                memberId: memberIdValue,
+                startdate: startdateValue,
+                enddate: enddateValue
+            });
+            const relativeUrl = `${basePath}?${params.toString()}`;
+
+            // const url = new URL('/Stats/Highest');
+            // Object.keys(paramobject).forEach(key => url.searchParams.append(key, params[key]));
+
+            console.log(relativeUrl);
 
             // Call the function to fetch the data
-            fetchHighestStats().then(data => {
+            fetchHighestStats(relativeUrl).then(data => {
                 if (window.myBar !== undefined)
                     window.myBar.destroy();
                 console.log(data); // Use the fetched data here
@@ -107,9 +183,10 @@
                         labels: data.objekte.map(foo => foo.name),
                         datasets:
                             [{
-                                label: 'Zahlung', // wird über callback
+                                label: 'Zahlung',
                                 data: data.objekte.map(foo => foo.amount),
-                                borderWidth: 1,
+                                borderWidth: 3,
+                                borderColor: 'green',
                                 backgroundColor: data.objekte.map(foo => foo.color),
                             }]
                     },
@@ -142,12 +219,17 @@
                         }
                     }
                 });
+
+                document.getElementById('filteredSumDeposits').innerHTML = data.sumDeposits;
+                document.getElementById('filteredSumWithdrawals').innerHTML = data.sumWithdrawals;
+                document.getElementById('filteredBalance').innerHTML = data.balance;
+
             }).catch(error => {
                 console.error('Error fetching data:', error);
             });
         }
 
-        fetchApi(null, null, null);
+        fetchApi();
 
     </script>
 }
