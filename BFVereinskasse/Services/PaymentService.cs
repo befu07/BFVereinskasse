@@ -3,6 +3,8 @@ using BFVereinskasse.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace BFVereinskasse.Services;
 
@@ -103,7 +105,31 @@ public class PaymentService
             var endDateDT = endDate.ToDateTime(new TimeOnly());
             payments = payments.Where(o => o.Datum <= endDateDT);
         }
-        payments = payments.OrderByDescending(o => o.Betrag);
+        //payments = payments.OrderByDescending(o => o.Betrag); // get ned mit SQLite 
         return await payments.ToListAsync();
+    }
+
+    //internal async Task<string> ExportJsonAsync()
+    //{
+    //    var members = await _ctx.Mitglieds.ToListAsync();
+    //    var payments = await _ctx.Zahlungs.ToListAsync();
+    //    var database = new Database { members = members, payments = payments };
+    //    return 
+    //    System.Text.Json.JsonSerializer.Serialize(database, new JsonSerializerOptions() { ReferenceHandler = ReferenceHandler.IgnoreCycles });
+    //}
+    internal async Task<int> ImportJsonAsync()
+    {
+        var json = System.IO.File.ReadAllText(@"database.json");
+        var jsonobject = System.Text.Json.JsonSerializer.Deserialize<Database>(json);
+        //_ctx.Mitglieds.AddRange(jsonobject.members);
+        //await _ctx.SaveChangesAsync();
+        _ctx.Zahlungs.AddRange(jsonobject.payments);
+        await _ctx.SaveChangesAsync();
+        return 1;
+    }
+    public struct Database
+    {
+        public List<Mitglied> members { get; set; }
+        public List<Zahlung> payments { get; set; }
     }
 }

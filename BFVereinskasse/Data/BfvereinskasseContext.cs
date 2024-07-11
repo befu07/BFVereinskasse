@@ -20,7 +20,7 @@ public partial class BfvereinskasseContext : DbContext
     public virtual DbSet<Zahlung> Zahlungs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("name=AppDb");
+        => optionsBuilder.UseSqlite("name=AppDb");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

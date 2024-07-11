@@ -31,37 +31,39 @@ namespace BFVereinskasse.Controllers
         public async Task<ActionResult> Highest(int memberId, DateOnly startDate, DateOnly endDate)
         {
             var payments = await _paymentService.GetZahlungen();
-            var filteredpayments = await _paymentService.GetFilteredZahlungenAsync(memberId, startDate, endDate);
-            var objekte = filteredpayments.Where(o => o.Betrag > 0).Take(5)
-                .Concat(filteredpayments.Where(o => o.Betrag < 0).TakeLast(5))
-                .Select(o => new
+            try
             {
-                name = o.Mitglied.Nachname,
-                amount = o.Betrag,
-                color = o.Betrag < 0 ? "pink" : "lightblue",
-                description = o.Beschreibung,
-                date = o.Datum.ToShortDateString(),
-            }).ToHashSet();
-            var balance = filteredpayments.Sum(o => o.Betrag).ToString("c");
-            var sumWithdrawals = filteredpayments.Where(o => o.Betrag < 0).Sum(o => o.Betrag).ToString("c");
-            var sumDeposits = filteredpayments.Where(o => o.Betrag > 0).Sum(o => o.Betrag).ToString("c");
-            var result = new
+                var filteredpayments = await _paymentService.GetFilteredZahlungenAsync(memberId, startDate, endDate);
+                filteredpayments = filteredpayments.OrderByDescending(o => o.Betrag).ToList();
+                var objekte = filteredpayments.Where(o => o.Betrag > 0).Take(5)
+                    .Concat(filteredpayments.Where(o => o.Betrag < 0).TakeLast(5))
+                    .Select(o => new
+                    {
+                        name = o.Mitglied.Nachname,
+                        amount = o.Betrag,
+                        color = o.Betrag < 0 ? "pink" : "lightblue",
+                        description = o.Beschreibung,
+                        date = o.Datum.ToShortDateString(),
+                    }).ToHashSet();
+                var balance = filteredpayments.Sum(o => o.Betrag).ToString("c");
+                var sumWithdrawals = filteredpayments.Where(o => o.Betrag < 0).Sum(o => o.Betrag).ToString("c");
+                var sumDeposits = filteredpayments.Where(o => o.Betrag > 0).Sum(o => o.Betrag).ToString("c");
+                var result = new
+                {
+                    objekte = objekte,
+                    sumDeposits = sumDeposits,
+                    sumWithdrawals = sumWithdrawals,
+                    balance = balance,
+                    count = filteredpayments.Count
+                };
+                return Ok(result);
+            }
+            catch (Exception e)
             {
-                objekte = objekte,
-                sumDeposits = sumDeposits,
-                sumWithdrawals = sumWithdrawals,
-                balance = balance,
-                count = filteredpayments.Count
-            };
-            return Ok(result);
+                await Console.Out.WriteLineAsync(e.Message);
+            }
 
-            return new JsonResult(new
-            {
-                objekte = objekte,
-                sumDeposits = sumDeposits,
-                sumWithdrawals = sumWithdrawals,
-                balance = balance
-            });
+            return new JsonResult(new());
         }
     }
 }

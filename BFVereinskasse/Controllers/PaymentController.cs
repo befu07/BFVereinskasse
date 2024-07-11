@@ -120,5 +120,19 @@ namespace BFVereinskasse.Controllers
                 return View(form);
             }
         }
+
+        //[HttpGet]
+        //public async Task<IActionResult> JsonExport()
+        //{
+        //    var json = await  _paymentService.ExportJsonAsync();
+        //    System.IO.File.WriteAllText(@"database.json",json);
+        //    return RedirectToAction("Index", "Home");
+        //}
+        [HttpGet]
+        public async Task<IActionResult> JsonImport()
+        {
+            var json = await  _paymentService.ImportJsonAsync();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
