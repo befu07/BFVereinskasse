@@ -50,7 +50,8 @@ namespace BFVereinskasse.Controllers
                 objekte = objekte,
                 sumDeposits = sumDeposits,
                 sumWithdrawals = sumWithdrawals,
-                balance = balance
+                balance = balance,
+                count = filteredpayments.Count
             };
             return Ok(result);
 

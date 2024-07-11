@@ -26,6 +26,9 @@
 <table class="table">
     <thead>
     <th>
+        Anzahl
+    </th>
+    <th>
         Summe Ein
     </th>
     <th>
@@ -36,6 +39,9 @@
     </th>
     </thead>
     <tr>
+        <td>
+            @Model.Payments.Count()
+        </td>
         <td>
             @Model.SumIn
         </td>
@@ -61,6 +67,9 @@
 <table class="table">
     <thead>
     <th>
+        Anzahl
+    </th>
+    <th>
         Summe Ein
     </th>
     <th>
@@ -71,6 +80,7 @@
     </th>
     </thead>
     <tr>
+        <td id="filteredCountPayments"></td>
         <td id="filteredSumDeposits"></td>
         <td id="filteredSumWithdrawals"></td>
         <td id="filteredBalance"></td>
@@ -213,6 +223,7 @@
                 document.getElementById('filteredSumDeposits').innerHTML = data.sumDeposits;
                 document.getElementById('filteredSumWithdrawals').innerHTML = data.sumWithdrawals;
                 document.getElementById('filteredBalance').innerHTML = data.balance;
+                document.getElementById('filteredCountPayments').innerHTML = data.count;
 
             }).catch(error => {
                 console.error('Error fetching data:', error);
