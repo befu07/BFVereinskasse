@@ -84,7 +84,7 @@
             Mitglied:
         </div>
         <div class="col-3">
-            <select id="memberId" name="MemberId">
+            <select id="memberId" name="MemberId" onchange="fetchApi()">
                 <option value=""> ...</option>
                 @foreach (var member in Model.Members)
                 {
@@ -99,52 +99,44 @@
                 }
             </select>
         </div>
-@*         <div class="col-2">
-            ZeitRaum
-        </div> *@
         <div class="col-1">
-            Von:
+            <label>Von:</label>
             <br />
-            Bis:
+            <label>Bis:</label>
         </div>
         <div class="col-2">
-            <input type="date" id="startDate" name="StartDate" />
+            <input onchange="fetchApi()"  type="date" id="startDate" name="StartDate" />
             <br />
-            <input type="date" id="endDate" name="EndDate" />
+            <input  onchange="fetchApi()" type="date" id="endDate" name="EndDate" />
+        </div>
+
+        <div class="col-2">
+            <input type="submit" value="Filter löschen" onclick="resetFilter()" />
         </div>
     </div>
-    <div class="row">
+@*     <div class="row">
         <div class="col-2">
             <input type="submit" value="Filter anwenden" onclick="fetchApi(memberId, startDate.value, endDate)" />
         </div>
-    </div>
+    </div> *@
 </div>
 
 
 <canvas id="myChart" style="width:100%;max-width:700px;max-height:300px;"></canvas>
 
-<canvas id="Highest5" style="width:100%;max-width:700px"></canvas>
-
-@* <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.3/Chart.js"></script> *@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 @section Scripts {
     <script>
         console.log('Chart.js version:', Chart.version);
+        fetchApi();
 
-        // Function to fetch JSON data from the specified URL
-        async function fetchHighestStats(url) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                const data = await response.json();
-                console.log("");
-                return data;
-            } catch (error) {
-                console.error('There has been a problem with your fetch operation:', error);
-            }
+
+        function resetFilter() { 
+            document.getElementById('memberId').value = '';
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            fetchApi();
         }
 
         function fetchApi() {
@@ -174,7 +166,7 @@
                 window.myBar = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: data.objekte.map(foo => foo.name),
+                        labels: data.objekte.map(foo => foo.date),
                         datasets:
                             [{
                                 label: 'Zahlung',
@@ -199,11 +191,15 @@
                                     label: function (context) {
                                         const index = context.dataIndex;
                                         const zahlung = data.objekte[index];
-                                        let tooltiptext = [zahlung.amount.toLocaleString('de-DE', {
+                                        let tooltiptext = [
+                                            zahlung.name,
+                                            zahlung.amount.toLocaleString('de-DE', {
                                             style: 'currency',
                                             currency: 'EUR',
                                             minimumFractionDigits: 2
-                                        }), zahlung.date, zahlung.description];
+                                        }), 
+                                        zahlung.date, 
+                                        zahlung.description];
 
                                         return tooltiptext;
                                         // return data.objekte[index].description;
@@ -222,122 +218,21 @@
                 console.error('Error fetching data:', error);
             });
         }
-
-        fetchApi();
-
-    </script>
-}
-
-@*
-        async function getData() {
+        // Function to fetch JSON data from the specified URL
+        async function fetchHighestStats(url) {
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
-                    throw new Error(`Response status: ${response.status}`);
+                    throw new Error('Network response was not ok ' + response.statusText);
                 }
-
-                const json = await response.json();
-                console.log(json);
+                const data = await response.json();
+                console.log("");
+                return data;
             } catch (error) {
-                console.error(error.message);
+                console.error('There has been a problem with your fetch operation:', error);
             }
         }
 
-        function GetJSON_Simple() {
-            var resp = [];
-            $.ajax({
-                type: "GET",
-                url: '/Stats/Highest',
-                async: false,
-                contentType: "application/json",
-                success: function (data) {
-                    resp.push(data);
-                },
-                error: function (req, status, error) {
-                    // do something with error
-                    alert("error");
-                }
-            });
-            return resp;
-        }
-        var simpleData = GetJSON_Simple();
-        // Define the URL to fetch data from
-        const url = '/Stats/Highest';
 
-
-        const ctx = document.getElementById('Highest5');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: simpleData[0].objekte.map(foo => foo.name),
-                datasets:
-                    [{
-                        label: 'Zahlung',
-                        data: simpleData[0].objekte.map(foo => foo.amount),
-                        borderWidth: 1,
-                        backgroundColor: simpleData[0].objekte.map(foo => foo.color),
-                    }]
-            },
-            options: {
-                // scales: {
-                //     yAxes: [{
-                //         ticks: {
-                //             beginAtZero: true
-                //         }
-                //     }]
-                // },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                },
-                legend: {
-                    display: false
-                }
-            }
-        });*@
-
-@* <script>
-    const ctx = document.getElementById('myChart');
-    new Chart(ctx, {
-        type: 'bar',
-        data: @Html.Raw(Model.PaymentsJson),
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-</script> *@
-@*
-
-                // var Names = [];
-                // var Amounts = [];
-                // @foreach (var item in Model.HighestPayments)
-            // {
-            //     @:Names.push(@item.Mitglied.Nachname);
-            //     @:Amounts.push(@item.Betrag);
-            // }
-<script>
-    const ctx = document.getElementById('myChart');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: @Html.Raw(Model.Names),
-            datasets: [{
-                label: 'Zahlungen',
-                data: @Html.Raw(Model.Amounts),
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-</script> *@
+    </script>
+}
